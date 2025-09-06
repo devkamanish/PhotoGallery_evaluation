@@ -39,9 +39,17 @@ const PhotoGrid = ({sortOrder, searchTerm, onPhotoClick}) => {
 
     }, [lastKey])
 
-    const filteredPhotos = photos
-    .filter((p)=> p.title.toLowerCase().includes(searchTerm.toLowerCase()))
-    .sort((a,b)=> (sortOrder ==="asc" ? a.title.localCompare(b.title): b.title.localCompare(a.title)))
+ const filteredPhotos = photos
+  .filter((p) => p && p.title && searchTerm
+    ? p.title.toLowerCase().includes(searchTerm.toLowerCase())
+    : true
+  )
+  .sort((a, b) => {
+    if (!a?.title || !b?.title) return 0; 
+    return sortOrder === "asc"
+      ? a.title.localeCompare(b.title)
+      : b.title.localeCompare(a.title);
+  });
 
 
   return (
